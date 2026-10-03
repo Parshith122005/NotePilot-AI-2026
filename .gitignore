@@ -1,12 +1,8 @@
-# Java / Maven
-backend/target/
-*.class
-
-# IDE files
-.idea/
-.vscode/
-
-# Secrets
 .env
 .env.*
 !.env.example
+backend/target/
+*.log
+.idea/
+*.iml
+.vscode/

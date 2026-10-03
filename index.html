@@ -1,41 +1,68 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NotePilot AI</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NotePilot AI</title>
+<!-- Change this to your deployed HTTPS backend URL (ending in /api) for production -->
+<meta name="api-base" content="http://localhost:8080/api">
+<script>try{document.documentElement.dataset.theme=JSON.parse(localStorage.getItem('np_theme'))||'dark'}catch(e){}</script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <header>
-        <h1>NotePilot AI</h1>
-    </header>
-
-    <main>
-        <section class="intro">
-            <h2>Turn your notes into knowledge.</h2>
-            <p>Your personal AI study assistant.<br>
-               Summarize notes, generate quizzes, and create flashcards.</p>
-        </section>
-
-        <section class="card">
-            <label for="notes">Your study notes</label>
-
-            <textarea id="notes"
-                placeholder="Paste your study notes here..."></textarea>
-
-            <button id="summarizeBtn">Generate Summary</button>
-
-            <div id="result" aria-live="polite"></div>
-        </section>
-    </main>
-
-    <footer>
-        Built with open-source AI in mind · NotePilot AI
-    </footer>
-
-    <script src="script.js"></script>
+<header class="top">
+  <b class="brand">NotePilot AI</b>
+  <nav id="nav" aria-label="Main">
+    <button data-go="dash">Dashboard</button><button data-go="summary">Summarizer</button><button data-go="quiz">Quiz</button>
+    <button data-go="cards">Flashcards</button><button data-go="library">Study Library</button><button data-go="timer">Timer</button>
+  </nav>
+  <button id="demoBtn" class="btn small" aria-pressed="false">Demo: off</button>
+  <button id="themeBtn" class="btn small"></button>
+</header>
+<p id="demoBar" class="demo bar" hidden>DEMO MODE: sample content only, no AI requests are made. Turn Demo off to use real AI generation.</p>
+<main>
+<section data-view="dash">
+  <h1>Your personal study space</h1>
+  <p class="muted">Turn lecture notes into summaries, quizzes and flashcards, then keep what you need in your Study Library.</p>
+  <div class="grid">
+    <article class="panel"><h3>Summarizer</h3><p class="muted">Condense notes into clear headings and bullets.</p><button class="btn primary" data-go="summary">Start summarizing</button></article>
+    <article class="panel"><h3>Quiz</h3><p class="muted">Practice with multiple-choice questions.</p><button class="btn primary" data-go="quiz">Create a quiz</button></article>
+    <article class="panel"><h3>Flashcards</h3><p class="muted">Flip, sort and review key terms.</p><button class="btn primary" data-go="cards">Make flashcards</button></article>
+  </div>
+  <h2>Your progress</h2><div id="dashStats"></div>
+  <h2>Recently saved</h2><div id="dashRecent"></div>
+</section>
+<section data-view="summary"><h1>Note Summarizer</h1><p class="muted">Paste notes to get a structured summary.</p></section>
+<section data-view="quiz"><h1>Quiz</h1><p class="muted">Generate multiple-choice questions from your notes.</p></section>
+<section data-view="cards"><h1>Flashcards</h1><p class="muted">Generate a deck, flip cards and track what you know.</p></section>
+<section data-view="library">
+  <h1>Study Library</h1>
+  <p class="muted">Saved items live in this browser on this device only. They do not sync across devices.</p>
+  <div class="row"><input id="libSearch" type="search" placeholder="Search title or content" aria-label="Search library">
+    <select id="libFilter" aria-label="Filter by type"><option value="all">All types</option><option value="summary">Summaries</option><option value="quiz">Quizzes</option><option value="cards">Flashcards</option></select>
+    <button id="libClear" class="btn">Clear all</button></div>
+  <div id="libList"></div>
+</section>
+<section data-view="timer">
+  <h1>Pomodoro Timer</h1>
+  <div class="panel center"><p id="tMode" class="muted"></p><div id="tClock" class="clock" role="timer"></div><p id="tMsg" class="muted" aria-live="polite"></p>
+    <div class="row c"><button id="tGo" class="btn primary"></button><button id="tReset" class="btn">Reset</button><button id="tSkip" class="btn">Skip</button></div>
+    <div class="row c">
+      <label>Focus (min) <input id="tFocus" type="number" min="1" max="180"></label>
+      <label>Short break <input id="tShort" type="number" min="1" max="60"></label>
+      <label>Long break <input id="tLong" type="number" min="1" max="120"></label></div></div>
+</section>
+</main>
+<template id="genT">
+  <div class="panel">
+    <label class="sr" for="">Notes</label>
+    <textarea rows="10" placeholder="Paste your notes here" aria-label="Notes"></textarea>
+    <div class="row"><span class="cnt muted">0 / 20000</span><button class="btn small sample" type="button">Insert sample notes</button><button class="btn primary go" type="button">Generate</button></div>
+    <p class="err" role="alert"></p>
+  </div>
+  <div class="out" aria-live="polite"></div>
+</template>
+<div id="toasts"></div>
+<script src="script.js"></script>
 </body>
 </html>
