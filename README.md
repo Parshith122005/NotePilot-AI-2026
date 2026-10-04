@@ -53,6 +53,7 @@ If your original `NoteRequest` used a different field name than `text`, update `
 ## Troubleshooting
 - "Cannot reach the backend": backend not running, wrong `api-base`, or origin missing from `CORS_ORIGINS`.
 - 503: `HF_TOKEN` not set for the running process.
+- HTTP 402 from the AI provider: check that the Hugging Face account has available credits and that its token can access the configured `HF_MODEL`; retry after resolving billing or access.
 - 502 "unusable response": the model returned malformed JSON twice; retry.
 
 ## Screenshots

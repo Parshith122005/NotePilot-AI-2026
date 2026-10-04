@@ -198,13 +198,19 @@ function drawCards() {
   box.append(el('p', 'muted', `${C.i + 1} of ${n} | Known ${known} | Review ${rev}`));
   const card = el('div', 'card'); card.tabIndex = 0; card.setAttribute('role', 'button'); card.setAttribute('aria-label', 'Flashcard. Press Enter or Space to flip.');
   card.append(el('div', 'face front', c.front), el('div', 'face back', c.back));
-  const flip = () => card.classList.toggle('flip');
+  const answerButton = btn('Show Answer', () => setFlipped(!card.classList.contains('flip')));
+  const setFlipped = flipped => {
+    card.classList.toggle('flip', flipped);
+    answerButton.textContent = flipped ? 'Hide Answer' : 'Show Answer';
+    answerButton.setAttribute('aria-pressed', String(flipped));
+  };
+  const flip = () => setFlipped(!card.classList.contains('flip'));
   card.addEventListener('click', flip); card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
   box.append(card);
   const row = el('div', 'row');
   const p = btn('Previous', () => { C.i--; drawCards(); }), nx = btn('Next', () => { C.i++; drawCards(); });
   p.disabled = C.i === 0; nx.disabled = C.i === n - 1;
-  row.append(p, nx, btn('Know it', () => markCard('known'), 'btn primary'), btn('Review again', () => markCard('review')), btn('Shuffle', () => restartCards(true)), btn('Restart', () => restartCards(false)));
+  row.append(p, nx, answerButton, btn('Know it', () => markCard('known'), 'btn primary'), btn('Review again', () => markCard('review')), btn('Shuffle', () => restartCards(true)), btn('Restart', () => restartCards(false)));
   box.append(row); out.append(box);
 }
 const RENDER = { summary: renderSummary, quiz: renderQuiz, cards: renderCards };
